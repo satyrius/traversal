@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 import unittest
 from decimal import Decimal
-from traversal import Node, avg
+from traversal import Node, visit, avg
 
 
 def d(float_value):
@@ -25,6 +25,20 @@ class NodeTest(unittest.TestCase):
 
 
 class TestTraverse(unittest.TestCase):
+    def test_visit(self):
+        n1 = Node(1)
+        n2 = Node(2)
+        n3 = Node(3)
+        n4 = Node(4)
+        n5 = Node(5)
+
+        n1.connect(n2, n3)
+        n2.connect(n3, n4, n5)
+        n3.connect(n1, n5)
+
+        unique_nodes = list(visit(n1))
+        self.assertEqual(len(unique_nodes), 5)
+
     def test_avg(self):
         n1 = Node(1)
         n2 = Node(2)
@@ -34,7 +48,8 @@ class TestTraverse(unittest.TestCase):
         n6 = Node(6)
 
         n1.connect(n2, n3)
-        n3.connect(n4, n5)
+        n3.connect(n4)
+        n4.connect(n5)
 
         self.assertEqual(
             d(avg(n2)),
